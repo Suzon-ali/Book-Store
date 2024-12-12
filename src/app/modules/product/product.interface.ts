@@ -1,5 +1,4 @@
-import { Model} from 'mongoose';
-
+import { Model } from 'mongoose';
 
 export type TProduct = {
   title: string;
@@ -12,8 +11,8 @@ export type TProduct = {
 };
 
 export type ProductMethods = {
-    // eslint-disable-next-line no-unused-vars
-    isProductExist(title: string) : Promise<TProduct | null>
-}
+  // eslint-disable-next-line no-unused-vars
+  isProductExist(title: string): Promise<TProduct | null>;
+};
 
 export type ProductModel = Model<TProduct, unknown, ProductMethods>;
