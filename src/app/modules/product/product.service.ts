@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { TProduct } from './product.interface';
 import { Product } from './product.model';
 
@@ -15,7 +16,33 @@ const getAllProductFromDB = async () => {
   return result;
 };
 
+const ediProductFromDB = async (id: string, updatedData: Partial<TProduct>) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('Invalid Product id!');
+  }
+  const result = await Product.updateOne(
+    { _id: id, isDeleted: { $ne: true } },
+    { $set: updatedData },
+    { $new: true },
+  );
+  return result;
+};
+
+const deleteProductFromDB = async (productId: string) => {
+  if (!mongoose.Types.ObjectId.isValid(productId)) {
+    throw new Error('Invalid Product id!');
+  }
+  const result = await Product.updateOne(
+    { _id: productId },
+    { isDeleted: true },
+  );
+  return result;
+};
+
 const getSingleProductFromDB = async (productId: string) => {
+  if (!mongoose.Types.ObjectId.isValid(productId)) {
+    throw new Error('Invalid Product id!');
+  }
   const result = await Product.findOne({ _id: productId });
   return result;
 };
@@ -56,4 +83,6 @@ export const ProductServices = {
   getAllProductFromDB,
   getSingleProductFromDB,
   getProducts,
+  deleteProductFromDB,
+  ediProductFromDB,
 };

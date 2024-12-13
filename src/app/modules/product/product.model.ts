@@ -1,5 +1,6 @@
-import { model, Schema } from 'mongoose';
+import { Aggregate, model, Schema } from 'mongoose';
 import { ProductMethods, ProductModel, TProduct } from './product.interface';
+import { NextFunction } from 'express';
 
 const productSchema = new Schema<TProduct, ProductModel, ProductMethods>(
   {
@@ -10,11 +11,27 @@ const productSchema = new Schema<TProduct, ProductModel, ProductMethods>(
     description: { type: String, required: true },
     quantity: { type: Number, required: true },
     inStock: { type: Boolean, required: true },
+    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
   },
 );
+
+//middlewares
+productSchema.pre('find', function (next: NextFunction) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+productSchema.pre('findOne', function (next: NextFunction) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+productSchema.pre('aggregate', function (next: NextFunction) {
+  const aggregate = this as Aggregate<any[]>;
+  aggregate.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
 
 productSchema.methods.isProductExist = async function (
   title: string,
