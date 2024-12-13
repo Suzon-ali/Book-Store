@@ -27,14 +27,25 @@ const createProduct = async (req: Request, res: Response) => {
 
 const getProducts = async (req: Request, res: Response) => {
   try {
-    const id: string | undefined = req.params.id;
+    const productId: string | undefined = req.params.productId;
+    const categories = req.query.category as string | string[] | undefined;
+    const titles = req.query.title as string | string[] | undefined;
+    const authors = req.query.author as string | string[] | undefined;
+
     let result: TProduct | TProduct[] | null = null;
 
-    if (id) {
-      result = await ProductServices.getSingleProductFromDB(id);
+    if (productId) {
+      result = await ProductServices.getSingleProductFromDB(productId);
+    } else if (categories || titles || authors) {
+      result = await ProductServices.getProducts({
+        title: titles,
+        category: categories,
+        author: authors,
+      });
     } else {
       result = await ProductServices.getAllProductFromDB();
     }
+
     res.status(200).json({
       success: true,
       message: 'Product fetched successfully!',
