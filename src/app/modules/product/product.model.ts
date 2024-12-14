@@ -4,14 +4,41 @@ import { NextFunction } from 'express';
 
 const productSchema = new Schema<TProduct, ProductModel, ProductMethods>(
   {
-    title: { type: String, required: true, unique: true },
-    author: { type: String, required: true },
-    price: { type: Number, required: true },
-    category: { type: String, required: true },
-    description: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    inStock: { type: Boolean, required: true },
-    isDeleted: { type: Boolean, default: false },
+    title: {
+      type: String,
+      required: [true, 'Product title is required'],
+      unique: true,
+    },
+    author: {
+      type: String,
+      required: [true, 'Author is required'],
+    },
+    price: {
+      type: Number,
+      required: [true, 'Price is required'],
+      min: [0, 'Price must be at least 0'],
+    },
+    category: {
+      type: String,
+      required: [true, 'Category is required'],
+    },
+    description: {
+      type: String,
+      required: [true, 'Description is required'],
+    },
+    quantity: {
+      type: Number,
+      required: [true, 'Quantity is required'],
+      min: [1, 'Quantity must be at least 1'],
+    },
+    inStock: {
+      type: Boolean,
+      required: [true, 'Stock status is required'],
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

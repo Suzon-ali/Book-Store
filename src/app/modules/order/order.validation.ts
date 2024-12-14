@@ -9,6 +9,7 @@ const orderValidationSchema = z.object({
   totalPrice: z
     .number()
     .min(0, { message: 'Total price must need to be more than 0' }),
+  isDeleted: z.boolean().optional(),
 });
 
 export default orderValidationSchema;
