@@ -20,10 +20,10 @@ const ediProductFromDB = async (id: string, updatedData: Partial<TProduct>) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error('Invalid Product id!');
   }
-  const result = await Product.updateOne(
+  const result = await Product.findOneAndUpdate(
     { _id: id, isDeleted: { $ne: true } },
     { $set: updatedData },
-    { $new: true },
+    { new: true },
   );
   return result;
 };

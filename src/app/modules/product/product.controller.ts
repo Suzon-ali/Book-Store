@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
-import productValidationSchema from './product.validation';
+import productValidationSchema, { productUpdateSchema } from './product.validation';
 import { TProduct } from './product.interface';
 
 const createProduct = async (req: Request, res: Response) => {
@@ -49,7 +49,7 @@ const editProduct = async (req: Request, res: Response) => {
   try {
     const productId: string | undefined = req.params.productId;
     const updatedData = req.body;
-    const valiatedData = productValidationSchema.parse(updatedData);
+    const valiatedData = productUpdateSchema.parse(updatedData);
     const result = await ProductServices.ediProductFromDB(
       productId,
       valiatedData,
@@ -64,7 +64,7 @@ const editProduct = async (req: Request, res: Response) => {
       res.status(200).json({
         success: true,
         message: 'Product Updated succesfully!',
-        data: valiatedData,
+        data: result,
       });
     }
   } catch (error) {
