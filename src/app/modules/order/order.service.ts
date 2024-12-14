@@ -33,6 +33,11 @@ const getOrderByEmail = async (email: string) => {
   return result;
 };
 
+const getOrderById = async (id: string) => {
+  const result = await Order.findOne({ _id: id });
+  return result;
+};
+
 const deleteOrderById = async (productId: string) => {
   if (!mongoose.Types.ObjectId.isValid(productId)) {
     throw new Error('Invalid Product id!');
@@ -46,4 +51,5 @@ export const OrderServices = {
   getOrderFromDB,
   deleteOrderById,
   getOrderByEmail,
+  getOrderById
 };

@@ -26,9 +26,12 @@ const createOrder = async (req: Request, res: Response) => {
 const getOrders = async (req: Request, res: Response) => {
   try {
     let result;
+    const id = req.params.productId;
     const email = req.query.email as string | undefined;
     if (email) {
       result = await OrderServices.getOrderByEmail(email);
+    }else if(id){
+      result = await OrderServices.getOrderById(id);
     } else {
       result = await OrderServices.getOrderFromDB();
     }
