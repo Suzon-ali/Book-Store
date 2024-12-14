@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
-import productValidationSchema, { productUpdateSchema } from './product.validation';
+import productValidationSchema, {
+  productUpdateSchema,
+} from './product.validation';
 import { TProduct } from './product.interface';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
@@ -17,10 +21,14 @@ const createProduct = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unexpected error occurred';
+
     res.status(500).json({
       success: false,
       message: errorMessage || 'Something is wrong',
-      error: error,
+      error: {
+        message: errorMessage,
+        stack: isDev && error instanceof Error ? error.stack : undefined,
+      },
     });
   }
 };
@@ -37,10 +45,14 @@ const deleteProduct = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unexpected error occurred';
+
     res.status(500).json({
       success: false,
       message: errorMessage || 'Something is wrong',
-      error: error,
+      error: {
+        message: errorMessage,
+        stack: isDev && error instanceof Error ? error.stack : undefined,
+      },
     });
   }
 };
@@ -70,10 +82,14 @@ const editProduct = async (req: Request, res: Response) => {
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unexpected error occurred';
+
     res.status(500).json({
       success: false,
       message: errorMessage || 'Something is wrong',
-      error: error,
+      error: {
+        message: errorMessage,
+        stack: isDev && error instanceof Error ? error.stack : undefined,
+      },
     });
   }
 };
@@ -107,10 +123,14 @@ const getProducts = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unexpected error occurred';
+
     res.status(500).json({
       success: false,
-      message: errorMessage,
-      error: error,
+      message: errorMessage || 'Something is wrong',
+      error: {
+        message: errorMessage,
+        stack: isDev && error instanceof Error ? error.stack : undefined,
+      },
     });
   }
 };

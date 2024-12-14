@@ -2,6 +2,8 @@ import { Response, Request } from 'express';
 import orderValidationSchema from './order.validation';
 import { OrderServices } from './order.service';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const createOrder = async (req: Request, res: Response) => {
   try {
     const { order: orderData } = req.body;
@@ -15,10 +17,14 @@ const createOrder = async (req: Request, res: Response) => {
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unexpected error occurred';
+
     res.status(500).json({
       success: false,
       message: errorMessage || 'Something is wrong',
-      error: error,
+      error: {
+        message: errorMessage,
+        stack: isDev && error instanceof Error ? error.stack : undefined,
+      },
     });
   }
 };
@@ -30,7 +36,7 @@ const getOrders = async (req: Request, res: Response) => {
     const email = req.query.email as string | undefined;
     if (email) {
       result = await OrderServices.getOrderByEmail(email);
-    }else if(id){
+    } else if (id) {
       result = await OrderServices.getOrderById(id);
     } else {
       result = await OrderServices.getOrderFromDB();
@@ -43,10 +49,14 @@ const getOrders = async (req: Request, res: Response) => {
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unexpected error occurred';
+
     res.status(500).json({
       success: false,
       message: errorMessage || 'Something is wrong',
-      error: error,
+      error: {
+        message: errorMessage,
+        stack: isDev && error instanceof Error ? error.stack : undefined,
+      },
     });
   }
 };
@@ -63,10 +73,14 @@ const deleteOrder = async (req: Request, res: Response) => {
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unexpected error occurred';
+
     res.status(500).json({
       success: false,
       message: errorMessage || 'Something is wrong',
-      error: error,
+      error: {
+        message: errorMessage,
+        stack: isDev && error instanceof Error ? error.stack : undefined,
+      },
     });
   }
 };
