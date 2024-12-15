@@ -36,6 +36,9 @@ const deleteProductFromDB = async (productId: string) => {
     { _id: productId },
     { isDeleted: true },
   );
+  if (result && result.modifiedCount === 0) {
+    throw new Error('Product not fund or already Deleted!');
+  }
   return result;
 };
 

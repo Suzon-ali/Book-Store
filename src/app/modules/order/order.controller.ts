@@ -1,8 +1,8 @@
 import { Response, Request } from 'express';
 import orderValidationSchema from './order.validation';
 import { OrderServices } from './order.service';
-
-const isDev = process.env.NODE_ENV === 'development';
+import { RevenueServices } from '../revanue/revenue.service';
+import { CustomerError } from '../errors/error.interface';
 
 const createOrder = async (req: Request, res: Response) => {
   try {
@@ -14,18 +14,25 @@ const createOrder = async (req: Request, res: Response) => {
       message: 'Order placed succesfully',
       data: result,
     });
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
+  } catch (error: unknown) {
+    if (error instanceof CustomerError) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
 
-    res.status(500).json({
-      success: false,
-      message: errorMessage || 'Something is wrong',
-      error: {
+      res.status(500).json({
+        success: false,
         message: errorMessage,
-        stack: isDev && error instanceof Error ? error.stack : undefined,
-      },
-    });
+        error: {
+          message: errorMessage,
+        },
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+    }
   }
 };
 
@@ -36,6 +43,8 @@ const getOrders = async (req: Request, res: Response) => {
     const email = req.query.email as string | undefined;
     if (email) {
       result = await OrderServices.getOrderByEmail(email);
+    } else if (id && id === 'revenue') {
+      result = await RevenueServices.getAllRevenue();
     } else if (id) {
       result = await OrderServices.getOrderById(id);
     } else {
@@ -43,21 +52,28 @@ const getOrders = async (req: Request, res: Response) => {
     }
     res.status(200).json({
       success: true,
-      message: 'Order fethced succesfully',
+      message: 'Data fethced succesfully',
       data: result,
     });
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
+  } catch (error: unknown) {
+    if (error instanceof CustomerError) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
 
-    res.status(500).json({
-      success: false,
-      message: errorMessage || 'Something is wrong',
-      error: {
+      res.status(500).json({
+        success: false,
         message: errorMessage,
-        stack: isDev && error instanceof Error ? error.stack : undefined,
-      },
-    });
+        error: {
+          message: errorMessage,
+        },
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+    }
   }
 };
 
@@ -70,18 +86,25 @@ const deleteOrder = async (req: Request, res: Response) => {
       message: 'Order Deleted Successfully!',
       data: result,
     });
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
+  } catch (error: unknown) {
+    if (error instanceof CustomerError) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
 
-    res.status(500).json({
-      success: false,
-      message: errorMessage || 'Something is wrong',
-      error: {
+      res.status(500).json({
+        success: false,
         message: errorMessage,
-        stack: isDev && error instanceof Error ? error.stack : undefined,
-      },
-    });
+        error: {
+          message: errorMessage,
+        },
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+    }
   }
 };
 

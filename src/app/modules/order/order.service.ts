@@ -51,5 +51,5 @@ export const OrderServices = {
   getOrderFromDB,
   deleteOrderById,
   getOrderByEmail,
-  getOrderById
+  getOrderById,
 };

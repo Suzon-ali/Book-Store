@@ -4,8 +4,7 @@ import productValidationSchema, {
   productUpdateSchema,
 } from './product.validation';
 import { TProduct } from './product.interface';
-
-const isDev = process.env.NODE_ENV === 'development';
+import { CustomerError } from '../errors/error.interface';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
@@ -19,17 +18,24 @@ const createProduct = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
+    if (error instanceof CustomerError) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
 
-    res.status(500).json({
-      success: false,
-      message: errorMessage || 'Something is wrong',
-      error: {
+      res.status(500).json({
+        success: false,
         message: errorMessage,
-        stack: isDev && error instanceof Error ? error.stack : undefined,
-      },
-    });
+        error: {
+          message: errorMessage,
+        },
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+    }
   }
 };
 
@@ -43,17 +49,24 @@ const deleteProduct = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
+    if (error instanceof CustomerError) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
 
-    res.status(500).json({
-      success: false,
-      message: errorMessage || 'Something is wrong',
-      error: {
+      res.status(500).json({
+        success: false,
         message: errorMessage,
-        stack: isDev && error instanceof Error ? error.stack : undefined,
-      },
-    });
+        error: {
+          message: errorMessage,
+        },
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+    }
   }
 };
 
@@ -79,18 +92,25 @@ const editProduct = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
+  } catch (error: unknown) {
+    if (error instanceof CustomerError) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
 
-    res.status(500).json({
-      success: false,
-      message: errorMessage || 'Something is wrong',
-      error: {
+      res.status(500).json({
+        success: false,
         message: errorMessage,
-        stack: isDev && error instanceof Error ? error.stack : undefined,
-      },
-    });
+        error: {
+          message: errorMessage,
+        },
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+    }
   }
 };
 
@@ -121,17 +141,24 @@ const getProducts = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
+    if (error instanceof CustomerError) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
 
-    res.status(500).json({
-      success: false,
-      message: errorMessage || 'Something is wrong',
-      error: {
+      res.status(500).json({
+        success: false,
         message: errorMessage,
-        stack: isDev && error instanceof Error ? error.stack : undefined,
-      },
-    });
+        error: {
+          message: errorMessage,
+        },
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+    }
   }
 };
 

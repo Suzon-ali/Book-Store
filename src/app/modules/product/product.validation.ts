@@ -35,6 +35,5 @@ const productValidationSchema = z.object({
   isDeleted: z.boolean().optional(),
 });
 
-
 export const productUpdateSchema = productValidationSchema.partial();
 export default productValidationSchema;

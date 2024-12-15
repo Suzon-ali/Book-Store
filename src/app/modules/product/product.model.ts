@@ -46,6 +46,7 @@ const productSchema = new Schema<TProduct, ProductModel, ProductMethods>(
 );
 
 //middlewares
+
 productSchema.pre('find', function (next: NextFunction) {
   this.find({ isDeleted: { $ne: true } });
   next();
@@ -54,8 +55,16 @@ productSchema.pre('findOne', function (next: NextFunction) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
+productSchema.pre('updateOne', function (next: NextFunction) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+productSchema.pre('findOneAndUpdate', function (next: NextFunction) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 productSchema.pre('aggregate', function (next: NextFunction) {
-  const aggregate = this as Aggregate<any[]>;
+  const aggregate = this as Aggregate<{ isDeleted: true }>;
   aggregate.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });
