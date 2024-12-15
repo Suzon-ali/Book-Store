@@ -1,6 +1,6 @@
 # Book-Store
 
-```markdown
+
 # Order Management System
 
 A comprehensive order management system built with **Express.js** and **MongoDB** to manage product orders, including CRUD operations and data filtering.
@@ -37,7 +37,6 @@ Make sure you have the following software installed on your system:
 
 ```bash
 git clone https://github.com/Suzon-ali/Book-Store.git
-cd order-management-system
 ```
 
 ### 2. Install dependencies:
