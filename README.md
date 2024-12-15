@@ -33,7 +33,7 @@ Make sure you have the following software installed on your system:
 
 ## Getting Started
 
-### 1. Clone the repositoryyyyy:
+### 1. Clone the repository:
 
 ```bash
 git clone https://github.com/Suzon-ali/Book-Store.git
