@@ -1,8 +1,8 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
-import { OrderRoutes } from './app/modules/order/order.route';
-import { ProductRoutes } from './app/modules/product/product.route';
-import { RevenueRoutes } from './app/modules/revanue/revenue.route';
+import router from './routes';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFoundHandler from './app/middlewares/notFoundHandler';
 
 const app: Application = express();
 
@@ -11,12 +11,13 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use('/api/products', ProductRoutes);
-app.use('/api/orders', OrderRoutes);
-app.use('/api/orders/revenue', RevenueRoutes);
+app.use('/api/', router);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
+
+app.use(globalErrorHandler);
+app.use(notFoundHandler);
 
 export default app;

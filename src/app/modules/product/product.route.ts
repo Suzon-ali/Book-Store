@@ -3,7 +3,7 @@ import { ProductControllers } from './product.controller';
 
 const router = express.Router();
 
-router.post('/create-product', ProductControllers.createProduct);
+router.post('/', ProductControllers.createProduct);
 router.get('/', ProductControllers.getProducts);
 router.get('/:productId', ProductControllers.getProducts);
 router.put('/:productId', ProductControllers.editProduct);

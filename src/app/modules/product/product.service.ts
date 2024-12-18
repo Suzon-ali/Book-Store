@@ -54,8 +54,10 @@ const getProducts = async (filters: {
   title?: string | string[];
   category?: string | string[];
   author?: string | string[];
+  limit?: number;
+  page?: number;
 }) => {
-  const { title, category, author } = filters;
+  const { title, category, author, limit = 6, page = 1 } = filters;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const queryCondition: any = {};
@@ -77,7 +79,12 @@ const getProducts = async (filters: {
       ? { $or: author.map((a) => ({ $regex: a, $options: 'i' })) }
       : { $regex: author, $options: 'i' };
   }
-  const result = await Product.find(queryCondition);
+
+  const result = await Product.find(queryCondition)
+    .sort({ price: 1 })
+    .skip((page - 1) * limit)
+    .limit(limit);
+
   return result;
 };
 
